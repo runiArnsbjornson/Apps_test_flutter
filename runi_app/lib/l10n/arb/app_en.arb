@@ -3,5 +3,15 @@
     "counterAppBarTitle": "Counter",
     "@counterAppBarTitle": {
         "description": "Text shown in the AppBar of the Counter Page"
-    }
+    },
+    "drawerMenu": "Menu",
+    "hpResetButtonText": "Reset Hp",
+
+
+
+
+
+
+
+   "uselessText": "useless"
 }
