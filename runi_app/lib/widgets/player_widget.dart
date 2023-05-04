@@ -20,12 +20,13 @@ class _PlayerWidgetState extends State<PlayerWidget> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           IconButton(
             iconSize: 72,
             color: Colors.black54,
-            icon: const Icon(Icons.remove),
-            onPressed: decreaseHp,
+            icon: const Icon(Icons.add),
+            onPressed: increaseHp,
           ),
           Expanded(
             child: Center(
@@ -44,8 +45,8 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           IconButton(
             iconSize: 72,
             color: Colors.black54,
-            icon: const Icon(Icons.add),
-            onPressed: increaseHp,
+            icon: const Icon(Icons.remove),
+            onPressed: decreaseHp,
           ),
         ],
       ),

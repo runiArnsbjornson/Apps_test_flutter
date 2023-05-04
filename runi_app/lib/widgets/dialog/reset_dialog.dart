@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:runi_app/l10n/l10n.dart';
 
 class ResetDialog extends StatelessWidget {
   const ResetDialog({super.key, required this.resetOnConfirm});
@@ -8,19 +9,19 @@ class ResetDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Reset'),
-      content: const Text('Are you sure ?'),
+      title: Text(context.l10n.hpResetButtonText),
+      content: Text(context.l10n.warningHpText),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
-          child: const Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+          child: Text(context.l10n.cancelButton),
         ),
         TextButton(
           onPressed: () {
             resetOnConfirm();
-            Navigator.pop(context, 'Reset');
+            Navigator.pop(context);
           },
-          child: const Text('Reset'),
+          child: Text(context.l10n.hpResetButtonText),
         ),
       ],
     );

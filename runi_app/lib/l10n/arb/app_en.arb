@@ -4,11 +4,18 @@
     "@counterAppBarTitle": {
         "description": "Text shown in the AppBar of the Counter Page"
     },
+    "appName": "Runi's awesome counter",
     "drawerMenu": "Menu",
+    "warningHpText": "Current Hp values will be lost",
     "hpResetButtonText": "Reset Hp",
-
-
-
+    "cancelButton": "Cancel",
+    "hpSetButtonText": "Set Hp",
+    "setHpAlert": "Set max hp to",
+    "hpChoice1": "10",
+    "hpChoice2": "20",
+    "hpChoice3": "50",
+    "hpChoiceCustom": "Custom",
+    "favoriteSettings": "Favorite",
 
 
 
