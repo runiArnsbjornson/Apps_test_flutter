@@ -19,49 +19,74 @@ class _PlayerWidgetState extends State<PlayerWidget> {
         color: widget.color,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          IconButton(
-            iconSize: 72,
-            color: Colors.black54,
-            icon: const Icon(Icons.add),
-            onPressed: increaseHp,
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                child: IconButton(
+                  alignment: Alignment.topCenter,
+                  iconSize: 72,
+                  color: Colors.black54,
+                  icon: const Icon(Icons.add),
+                  onPressed: increaseHp,
+                ),
+              ),
+              Expanded(
+                child: Listener(
+                  child: const Icon(
+                    Icons.remove,
+                    size: 72,
+                    color: Colors.black54,
+                  ),
+                  onPointerPanZoomStart: (event) {
+                    print('Pan : ${event.position}');
+                    decreaseTenHp();
+                  },
+                  onPointerDown: (event) {
+                    print(event.position);
+                    decreaseHp();
+                  },
+                ),
+                // child: IconButton(
+                //   alignment: Alignment.bottomCenter,
+                //   iconSize: 72,
+                //   color: Colors.black54,
+                //   icon: const Icon(Icons.remove),
+                //   onPressed: decreaseHp,
+                // ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Center(
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return Text(
-                    widget.player.hp.toString(),
-                    style: TextStyle(
-                      fontSize: constraints.maxHeight >= 100 ? 100 : 54,
-                    ),
-                  );
-                },
+          Center(
+            child: FittedBox(
+              child: Text(
+                widget.player.hp.toString(),
+                style: const TextStyle(
+                  fontSize: 150,
+                ),
               ),
             ),
-          ),
-          IconButton(
-            iconSize: 72,
-            color: Colors.black54,
-            icon: const Icon(Icons.remove),
-            onPressed: decreaseHp,
           ),
         ],
       ),
     );
   }
 
-  void decreaseHp() {
-    setState(() {
-      widget.player.decreaseHp();
-    });
-  }
+  void decreaseTenHp() => setState(() {
+        widget.player.tenHpDecrease();
+      });
 
-  void increaseHp() {
-    setState(() {
-      widget.player.increaseHp();
-    });
-  }
+  void increaseTenHp() => setState(() {
+        widget.player.tenHpIncrease();
+      });
+
+  void decreaseHp() => setState(() {
+        widget.player.decreaseHp();
+      });
+
+  void increaseHp() => setState(() {
+        widget.player.increaseHp();
+      });
 }

@@ -10,6 +10,9 @@ class Player {
   void reset() => _hp = startHp;
 
   void increaseHp() => _hp++;
+  void tenHpIncrease() => _hp += 10;
 
   void decreaseHp() => _hp--;
+  void tenHpDecrease() => _hp -= 10;
+
 }

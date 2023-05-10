@@ -39,13 +39,13 @@ class _GamePageState extends State<GamePage> {
         drawer: const MenuWidget(),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Transform.rotate(
                   angle: pi,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                    padding: const EdgeInsets.all(8),
                     child: PlayerWidget(
                       color: Colors.blue,
                       player: p1,
@@ -55,7 +55,7 @@ class _GamePageState extends State<GamePage> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                  padding: const EdgeInsets.all(8),
                   child: PlayerWidget(
                     color: Colors.red,
                     player: p2,

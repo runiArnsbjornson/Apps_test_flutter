@@ -6,16 +6,23 @@ import 'package:runi_app/l10n/l10n.dart';
 import 'package:runi_app/models/change_hp_notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FavoriteSetting extends StatefulWidget {
-  const FavoriteSetting({super.key});
+class FavoriteSettingsWidget extends StatefulWidget {
+  const FavoriteSettingsWidget({super.key});
 
   @override
-  State<FavoriteSetting> createState() => _FavoriteState();
+  State<FavoriteSettingsWidget> createState() => _FavoriteState();
 }
 
-class _FavoriteState extends State<FavoriteSetting> {
+class _FavoriteState extends State<FavoriteSettingsWidget> {
   final Future<SharedPreferences> _fav = SharedPreferences.getInstance();
   late Future<List<String>> _listFav;
+  final TextEditingController _textControl = TextEditingController();
+
+  @override
+  void dispose() {
+    _textControl.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -36,16 +43,22 @@ class _FavoriteState extends State<FavoriteSetting> {
       ),
       children: [
         ListTile(
+          visualDensity: const VisualDensity(vertical: -3),
           leading: const Icon(
             Icons.add_circle_outline,
-            size: 25,
+            size: 20,
           ),
           title: SizedBox(
             width: 70,
+            height: 56,
             child: TextField(
+              controller: _textControl,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               keyboardType: TextInputType.number,
-              onSubmitted: _addFav,
+              onSubmitted: (value) {
+                _addFav(value);
+                _textControl.clear();
+              },
             ),
           ),
         ),
@@ -70,7 +83,7 @@ class _FavoriteState extends State<FavoriteSetting> {
                     title: Text('Error: ${snapshot.error}'),
                   );
                 } else {
-                  return listView(snapshot.data?? []);
+                  return listView(snapshot.data ?? []);
                 }
             }
           },
@@ -84,9 +97,10 @@ class _FavoriteState extends State<FavoriteSetting> {
     for (final fav in listFav) {
       listViewer.add(
         ListTile(
-          leading: IconButton(
+          visualDensity: const VisualDensity(vertical: -3),
+          trailing: IconButton(
             icon: const Icon(
-              size: 25,
+              size: 20,
               Icons.delete,
             ),
             onPressed: () => _removeFav(fav),
@@ -105,7 +119,13 @@ class _FavoriteState extends State<FavoriteSetting> {
     final fav = await _fav;
     final listFav = fav.getStringList('favorite') ?? [];
 
-    if (!listFav.contains(newFav)) {
+    if (listFav.length >= 3 && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.tooManyFavorite)),
+      );
+    }
+
+    if (!listFav.contains(newFav) && listFav.length < 3) {
       listFav.add(newFav);
       setState(() {
         _listFav = fav.setStringList('favorite', listFav).then((bool success) {

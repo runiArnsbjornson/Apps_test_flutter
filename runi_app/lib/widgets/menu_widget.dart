@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:runi_app/l10n/l10n.dart';
 import 'package:runi_app/models/change_hp_notification.dart';
-import 'package:runi_app/models/favorite_setting.dart';
+import 'package:runi_app/widgets/favorite_settings_widget.dart';
 import 'package:runi_app/models/reset_hp_notification.dart';
 import 'package:runi_app/widgets/dialog/reset_dialog.dart';
 import 'package:runi_app/widgets/dialog/set_hp_dialog.dart';
@@ -59,7 +59,7 @@ class _MenuWidgetState extends State<MenuWidget> {
               ),
             ),
           ),
-          const FavoriteSetting(),
+          const FavoriteSettingsWidget(),
         ],
       ),
     );
