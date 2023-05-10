@@ -25,46 +25,26 @@ class _PlayerWidgetState extends State<PlayerWidget> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Expanded(
-                child: IconButton(
-                  alignment: Alignment.topCenter,
-                  iconSize: 72,
-                  color: Colors.black54,
-                  icon: const Icon(Icons.add),
-                  onPressed: increaseHp,
-                ),
-              ),
+                  child: TouchDetector.plus(
+                player: widget.player,
+                stateSetter: setState,
+              )),
               Expanded(
-                child: Listener(
-                  child: const Icon(
-                    Icons.remove,
-                    size: 72,
-                    color: Colors.black54,
-                  ),
-                  onPointerPanZoomStart: (event) {
-                    print('Pan : ${event.position}');
-                    decreaseTenHp();
-                  },
-                  onPointerDown: (event) {
-                    print(event.position);
-                    decreaseHp();
-                  },
+                child: TouchDetector.minus(
+                  player: widget.player,
+                  stateSetter: setState,
                 ),
-                // child: IconButton(
-                //   alignment: Alignment.bottomCenter,
-                //   iconSize: 72,
-                //   color: Colors.black54,
-                //   icon: const Icon(Icons.remove),
-                //   onPressed: decreaseHp,
-                // ),
               ),
             ],
           ),
-          Center(
-            child: FittedBox(
-              child: Text(
-                widget.player.hp.toString(),
-                style: const TextStyle(
-                  fontSize: 150,
+          IgnorePointer(
+            child: Center(
+              child: FittedBox(
+                child: Text(
+                  widget.player.hp.toString(),
+                  style: const TextStyle(
+                    fontSize: 150,
+                  ),
                 ),
               ),
             ),
@@ -73,20 +53,77 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       ),
     );
   }
+}
 
-  void decreaseTenHp() => setState(() {
-        widget.player.tenHpDecrease();
-      });
+class TouchDetector extends StatefulWidget {
+  const TouchDetector({
+    super.key,
+    required this.onSingleTap,
+    required this.onDoubleTap,
+    required this.content,
+    required this.stateSetter,
+  });
 
-  void increaseTenHp() => setState(() {
-        widget.player.tenHpIncrease();
-      });
+  TouchDetector.minus({
+    super.key,
+    required Player player,
+    required this.stateSetter,
+  })  : onSingleTap = player.decreaseHp,
+        onDoubleTap = player.tenHpDecrease,
+        content = const Align(
+          alignment: Alignment.bottomCenter,
+          child: Icon(
+            Icons.remove,
+            size: 72,
+            color: Colors.black54,
+          ),
+        );
 
-  void decreaseHp() => setState(() {
-        widget.player.decreaseHp();
-      });
+  TouchDetector.plus({
+    super.key,
+    required Player player,
+    required this.stateSetter,
+  })  : onSingleTap = player.increaseHp,
+        onDoubleTap = player.tenHpIncrease,
+        content = const Align(
+          alignment: Alignment.topCenter,
+          child: Icon(
+            Icons.add,
+            size: 72,
+            color: Colors.black54,
+          ),
+        );
 
-  void increaseHp() => setState(() {
-        widget.player.increaseHp();
-      });
+  final VoidCallback onSingleTap;
+  final VoidCallback onDoubleTap;
+  final Widget content;
+  final void Function(VoidCallback) stateSetter;
+
+  @override
+  State<TouchDetector> createState() => _TouchDetectorState();
+}
+
+class _TouchDetectorState extends State<TouchDetector> {
+  int nbPointer = 0;
+  bool shouldConsiderNext = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerUp: (event) {
+        nbPointer--;
+        if (nbPointer == 0 && shouldConsiderNext) {
+          widget.stateSetter(() => widget.onSingleTap());
+        } else if (nbPointer == 1) {
+          widget.stateSetter(() => widget.onDoubleTap());
+        }
+        shouldConsiderNext = nbPointer <= 0;
+      },
+      onPointerDown: (event) {
+        nbPointer++;
+      },
+      child: widget.content,
+    );
+  }
 }

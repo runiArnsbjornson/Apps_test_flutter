@@ -14,5 +14,4 @@ class Player {
 
   void decreaseHp() => _hp--;
   void tenHpDecrease() => _hp -= 10;
-
 }
